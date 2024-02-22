@@ -5,6 +5,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import com.example.alarmapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -16,8 +17,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        supportFragmentManager.beginTransaction()
-            .replace(binding.fragment.id, TimerFragment())
-            .commit()
+        supportFragmentManager.commit {
+            replace(binding.fragment.id, TimerFragment())
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.alarmapp
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -27,8 +28,9 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val mediaPlayer = MediaPlayer.create(context, R.raw.positive_notification)
         //todo replace with coroutine realization
-        val timer = object : CountDownTimer(10000, 1000) {
+        val timer = object : CountDownTimer(1000, 1000) {
             override fun onTick(p0: Long) {
                 binding.progress.text = "${p0 / 1000}"
                 binding.progressBar.progress = (p0 / 1000).toInt()
@@ -37,10 +39,12 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
             }
 
             override fun onFinish() {
+                mediaPlayer.start()
             }
 
         }
-
-        timer.start()
+        binding.button.setOnClickListener {
+            timer.start()
+        }
     }
 }
