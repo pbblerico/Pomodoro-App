@@ -16,9 +16,23 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        //todo fix navigation
         supportFragmentManager.commit {
             replace(binding.fragment.id, TimerFragment())
+        }
+
+        binding.bottomNav.setOnNavigationItemReselectedListener {
+            setFragment(it.itemId)
+        }
+    }
+
+    private fun setFragment(itemId: Int) {
+        val fragment = when(itemId) {
+            R.id.TimerFragment -> TimerFragment()
+            else -> SettingsFragment()
+        }
+        supportFragmentManager.commit {
+            replace(binding.fragment.id, fragment)
         }
     }
 }
