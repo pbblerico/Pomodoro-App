@@ -4,12 +4,20 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.example.alarmapp.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    private val timerFragment = TimerFragment()
+    private val settingsFragment = SettingsFragment()
+
+    private var activeFragment: Fragment = timerFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,21 +26,26 @@ class MainActivity : AppCompatActivity() {
 
         //todo fix navigation
         supportFragmentManager.commit {
-            replace(binding.fragment.id, TimerFragment())
+            add(binding.fragment.id, settingsFragment)
+            hide(settingsFragment)
+            add(binding.fragment.id, timerFragment)
         }
 
-        binding.bottomNav.setOnNavigationItemReselectedListener {
-            setFragment(it.itemId)
+        binding.bottomNav.setOnItemSelectedListener {menuItem ->
+            when(menuItem.itemId){
+                R.id.TimerFragment -> {setFragment(timerFragment)}
+                R.id.SettingsFragment -> {setFragment(settingsFragment)}
+                else -> false
+            }
         }
     }
 
-    private fun setFragment(itemId: Int) {
-        val fragment = when(itemId) {
-            R.id.TimerFragment -> TimerFragment()
-            else -> SettingsFragment()
-        }
+    private fun setFragment(fragment: Fragment): Boolean {
         supportFragmentManager.commit {
-            replace(binding.fragment.id, fragment)
+            hide(activeFragment)
+            show(fragment)
+            activeFragment = fragment
         }
+        return true
     }
 }

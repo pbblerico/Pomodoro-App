@@ -8,12 +8,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.example.alarmapp.databinding.FragmentTimerBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class TimerFragment : Fragment(R.layout.fragment_timer) {
     private lateinit var binding: FragmentTimerBinding
+    private val viewModel: TimerViewModel by activityViewModels()
+
+    private var active = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("timer", "start")
     }
 
     override fun onCreateView(
@@ -21,30 +30,93 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTimerBinding.inflate(inflater, container, false)
+        Log.d("timer", "create view")
         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("timer", "view created")
 
+        binding.chipGroup.check(binding.f.id)
+        var timer = setTimer(viewModel.focus.value ?: 1000)
+        binding.button.setOnClickListener {
+            if(!active) {
+                timer.start()
+                binding.button.text = getString(R.string.stop)
+            } else {
+                timer.cancel()
+                binding.button.text = getString(R.string.start)
+            }
+            active = !active
+        }
+        
+       binding.chipGroup.setOnCheckedChangeListener {group, checkedId ->
+            if(checkedId != -1) {
+                val mode = when(checkedId) {
+                    binding.f.id -> {TimerMode.FOCUS}
+                    binding.sb.id -> {TimerMode.SHORT_BREAK}
+                    else -> {TimerMode.LONG_BREAK}
+                }
+                viewModel.setMode(mode)
+                timer = setTimer(viewModel.focus.value ?: 1000)
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("timer", "start")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("timer", "resume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("timer", "pause")
+    }
+
+    private fun setTime() {
+        val time = when(viewModel.curMode.value) {
+            TimerMode.FOCUS -> viewModel.focus.value ?:1000
+            TimerMode.SHORT_BREAK -> viewModel.shortBreak.value ?: 1000
+            else -> viewModel.longBreak.value ?: 1000
+        }
+
+        binding.progressBar.max = (time / 1000).toInt()
+        binding.progressBar.progress = binding.progressBar.max
+
+        setTime(time)
+    }
+
+    private fun setTime(time: Long) {
+        val hours = time / 1000 / 3600
+        val minutes = time / 1000 / 60
+        val seconds = time / 1000 % 60 % 60
+        binding.progress.text = if(hours > 0) {
+            String.format("%d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            String.format("%02d:%02d", minutes, seconds)
+        }
+    }
+
+    private fun setTimer(time: Long): CountDownTimer {
         val mediaPlayer = MediaPlayer.create(context, R.raw.positive_notification)
+        setTime()
         //todo replace with coroutine realization
-        val timer = object : CountDownTimer(1000, 1000) {
+        return object : CountDownTimer(time, 1000) {
             override fun onTick(p0: Long) {
-                binding.progress.text = "${p0 / 1000}"
+                setTime(p0)
                 binding.progressBar.progress = (p0 / 1000).toInt()
-
-                Log.d("here", "${p0 / 10000 * 100}")
             }
 
             override fun onFinish() {
                 mediaPlayer.start()
             }
-
-        }
-        binding.button.setOnClickListener {
-            timer.start()
         }
     }
 }

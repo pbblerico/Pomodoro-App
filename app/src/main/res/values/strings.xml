@@ -10,4 +10,6 @@
     <string name="focus">focus</string>
     <string name="short_break">short break</string>
     <string name="long_break">long break</string>
+    <string name="save">save</string>
+    <string name="stop">stop</string>
 </resources>
