@@ -4,20 +4,20 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.alarmapp.databinding.FragmentTimerBinding
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class TimerFragment : Fragment(R.layout.fragment_timer) {
     private lateinit var binding: FragmentTimerBinding
     private val viewModel: TimerViewModel by activityViewModels()
+//    private val mainViewModel: MainViewModel by viewModels()
 
     private var active = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +42,7 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
         binding.chipGroup.check(binding.f.id)
         var timer = setTimer(viewModel.focus.value ?: 1000)
         binding.button.setOnClickListener {
+//            mainViewModel.showSimpleNotification()
             if(!active) {
                 timer.start()
                 binding.button.text = getString(R.string.stop)
@@ -64,22 +65,6 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
             }
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("timer", "start")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("timer", "resume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("timer", "pause")
-    }
-
     private fun setTime() {
         val time = when(viewModel.curMode.value) {
             TimerMode.FOCUS -> viewModel.focus.value ?:1000
