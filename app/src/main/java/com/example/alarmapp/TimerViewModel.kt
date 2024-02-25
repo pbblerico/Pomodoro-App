@@ -2,6 +2,8 @@ package com.example.alarmapp
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.alarmapp.data.repository.SharedPrefRepository
+import com.example.alarmapp.utils.TimerMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -17,14 +19,8 @@ class TimerViewModel @Inject constructor(repo: SharedPrefRepository): ViewModel(
     private val _longBreak = MutableLiveData<Long>()
     val longBreak = _longBreak
 
-    private val _mlsLeftFocus = MutableLiveData<Long?>()
-    val mlsLeftFocus = _mlsLeftFocus
-
-    private val _mlsLeftShortBreak = MutableLiveData<Long?>()
-    val mlsLeftShortBreak = _mlsLeftShortBreak
-
-    private val _mlsLeftLongBreak = MutableLiveData<Long?>()
-    val mlsLeftLongBreak = _mlsLeftLongBreak
+    private val _mlsLeft = MutableLiveData<Long?>()
+    val mlsLeftFocus = _mlsLeft
 
     private val _curMode = MutableLiveData<TimerMode>()
     val curMode = _curMode
@@ -36,9 +32,8 @@ class TimerViewModel @Inject constructor(repo: SharedPrefRepository): ViewModel(
     }
 
     fun saveTimeLeft(
-        timeLeftFocus: Long? = null,
-        timeLeftShortBreak: Long? = null) {
-        _mlsLeftFocus.value = timeLeftFocus
+        timeLeft: Long? = null) {
+        _mlsLeft.value = timeLeft
     }
 
     fun setMode(mode: TimerMode) {

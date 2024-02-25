@@ -9,15 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.example.alarmapp.databinding.FragmentTimerBinding
+import com.example.alarmapp.utils.TimerMode
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class TimerFragment : Fragment(R.layout.fragment_timer) {
     private lateinit var binding: FragmentTimerBinding
     private val viewModel: TimerViewModel by activityViewModels()
-//    private val mainViewModel: MainViewModel by viewModels()
 
     private var active = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,9 +55,12 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
        binding.chipGroup.setOnCheckedChangeListener {group, checkedId ->
             if(checkedId != -1) {
                 val mode = when(checkedId) {
-                    binding.f.id -> {TimerMode.FOCUS}
-                    binding.sb.id -> {TimerMode.SHORT_BREAK}
-                    else -> {TimerMode.LONG_BREAK}
+                    binding.f.id -> {
+                        TimerMode.FOCUS}
+                    binding.sb.id -> {
+                        TimerMode.SHORT_BREAK}
+                    else -> {
+                        TimerMode.LONG_BREAK}
                 }
                 viewModel.setMode(mode)
                 timer = setTimer(viewModel.focus.value ?: 1000)
