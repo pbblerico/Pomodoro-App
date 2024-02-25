@@ -2,9 +2,11 @@ package com.example.alarmapp
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.CountDownTimer
 import android.os.IBinder
@@ -27,6 +29,7 @@ class TimerService: Service() {
     }
 
     private fun startTimer(millis: Long) {
+        val mediaPlayer = MediaPlayer.create(this, R.raw.positive_notification)
         countDownTimer = object: CountDownTimer(millis, 1000) {
             override fun onTick(p0: Long) {
                 val timeRemaining = formatTime(p0)
@@ -34,6 +37,7 @@ class TimerService: Service() {
             }
 
             override fun onFinish() {
+                mediaPlayer.start()
                 stopSelf()
             }
 
@@ -42,16 +46,40 @@ class TimerService: Service() {
     }
 
     private fun updateNotification(contentText: String) {
+        val intent = Intent(this, MyReceiver::class.java).apply {
+            putExtra("MESSAGE", "Clicked!")
+            this.action = "cancel_timer"
+            countDownTimer.cancel()
+        }
+        val flag =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                PendingIntent.FLAG_IMMUTABLE
+            else
+                0
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
         val channelId = "timer_channel"
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setContentTitle("Timer")
             .setContentText(contentText)
             .setSmallIcon(R.drawable.ic_timer)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .addAction(
+                0,
+                "Stop",
+                pendingIntent
+            )
+
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channelName = "Timer Channel"
-            val importance = NotificationManager.IMPORTANCE_LOW
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, channelName, importance)
             notificationManager.createNotificationChannel(channel)
         }

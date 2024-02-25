@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity() {
                 pushPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
             }
         }
-        val serviceIntent = Intent(this, TimerService::class.java)
-        startService(serviceIntent)
+//        val serviceIntent = Intent(this, TimerService::class.java)
+//        startService(serviceIntent)
 
         //todo fix navigation
         supportFragmentManager.commit {

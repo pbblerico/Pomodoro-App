@@ -25,7 +25,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".TimerService" />
+        <service android:name=".TimerService"
+            android:enabled="true"
+            android:exported="false"/>
+        <receiver android:name=".MyReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.alarmapp.ACTION_START"/>
+                <action android:name="com.example.alarmapp.ACTION_STOP"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

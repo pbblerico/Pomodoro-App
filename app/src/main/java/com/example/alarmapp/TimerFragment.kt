@@ -1,5 +1,6 @@
 package com.example.alarmapp
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -50,6 +51,9 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
                 binding.button.text = getString(R.string.start)
             }
             active = !active
+
+            val serviceIntent = Intent(requireActivity(), TimerService::class.java)
+            requireActivity().startService(serviceIntent)
         }
         
        binding.chipGroup.setOnCheckedChangeListener {group, checkedId ->
