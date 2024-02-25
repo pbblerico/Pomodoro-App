@@ -49,7 +49,7 @@ class TimerService: Service() {
         val intent = Intent(this, MyReceiver::class.java).apply {
             putExtra("MESSAGE", "Clicked!")
             this.action = "cancel_timer"
-            countDownTimer.cancel()
+//            countDownTimer.cancel()
         }
         val flag =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -60,7 +60,7 @@ class TimerService: Service() {
             this,
             0,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            flag
         )
 
         val channelId = "timer_channel"

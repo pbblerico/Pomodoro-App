@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TimerFragment">
+    android:background="@color/surface"
+    tools:context=".presentation.TimerFragment">
 
     <TextView
         android:id="@+id/title"
@@ -33,6 +34,8 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/secondary"
+            android:textColor="@color/black"
             android:text="@string/short_break" />
 
 
@@ -41,6 +44,8 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/secondary"
+            android:textColor="@color/black"
             android:text="@string/focus" />
 
         <com.google.android.material.chip.Chip
@@ -48,6 +53,8 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:chipBackgroundColor="@color/secondary"
+            android:textColor="@color/black"
             android:text="@string/long_break" />
 
     </com.google.android.material.chip.ChipGroup>
@@ -72,7 +79,7 @@
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
+        android:text="00:00"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@id/progress_bar"
         app:layout_constraintEnd_toEndOf="@id/progress_bar"
@@ -86,6 +93,7 @@
         android:layout_margin="48dp"
         android:text="@string/start"
         android:textAllCaps="true"
+        android:backgroundTint="@color/surfaceTint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/progress_bar"
         app:layout_constraintStart_toStartOf="@id/progress_bar"

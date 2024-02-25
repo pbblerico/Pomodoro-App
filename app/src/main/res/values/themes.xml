@@ -8,4 +8,7 @@
     <style name="Theme.AlarmApp" parent="Base.Theme.AlarmApp">
         <item name="android:statusBarColor">@color/black</item>
     </style>
+    <style name="CustomChipChoice" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor"></item>
+    </style>
 </resources>

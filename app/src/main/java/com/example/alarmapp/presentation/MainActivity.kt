@@ -1,6 +1,5 @@
-package com.example.alarmapp
+package com.example.alarmapp.presentation
 
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.example.alarmapp.R
 import com.example.alarmapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

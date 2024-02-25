@@ -1,4 +1,4 @@
-package com.example.alarmapp
+package com.example.alarmapp.presentation
 
 import android.content.Intent
 import android.media.MediaPlayer
@@ -10,6 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.alarmapp.R
+import com.example.alarmapp.TimerService
+import com.example.alarmapp.TimerViewModel
 import com.example.alarmapp.databinding.FragmentTimerBinding
 import com.example.alarmapp.utils.TimerMode
 import dagger.hilt.android.AndroidEntryPoint
