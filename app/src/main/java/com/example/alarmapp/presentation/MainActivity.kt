@@ -10,9 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.example.alarmapp.CustomCountDownTimer
 import com.example.alarmapp.R
 import com.example.alarmapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -33,6 +37,15 @@ class MainActivity : AppCompatActivity() {
                 pushPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
             }
         }
+
+        val timer = CustomCountDownTimer(10)
+//        GlobalScope.launch {
+//            timer.tick(this)
+//            delay(5000)
+//            timer.stop()
+//            delay(5000)
+//            timer.tick(this)
+//        }
 //        val serviceIntent = Intent(this, TimerService::class.java)
 //        startService(serviceIntent)
 

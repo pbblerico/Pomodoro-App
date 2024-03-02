@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.example.alarmapp.CustomCountDownTimer
 import com.example.alarmapp.R
 import com.example.alarmapp.TimerService
 import com.example.alarmapp.TimerViewModel
@@ -29,7 +30,6 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
     private var active = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("timer", "start")
     }
 
     override fun onCreateView(
@@ -37,63 +37,72 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTimerBinding.inflate(inflater, container, false)
-        Log.d("timer", "create view")
         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("timer", "view created")
 
-        if(!active) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.timer.collect {
-//                    binding.chipGroup.check(binding.f)
-//                    binding.progress.text = it.focusTime
-                    setTime(it.focusTime)
+
+        val timer = CustomCountDownTimer(10)
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            timer.tick(this)
+            var running = false
+            binding.button.setOnClickListener {
+                if(running) {
+                    timer.stop()
+                    running = false
                 }
-
-            }
-        }
-
-        binding.chipGroup.check(binding.f.id)
-        var timer = setTimer(viewModel.focus.value ?: 1000)
-        binding.button.setOnClickListener {
-//            mainViewModel.showSimpleNotification()
-            if(!active) {
-                timer.start()
-                binding.button.text = getString(R.string.stop)
-            } else {
-                timer.cancel()
-                binding.button.text = getString(R.string.start)
-            }
-            active = !active
-
-            val serviceIntent = Intent(requireActivity(), TimerService::class.java)
-            requireActivity().startService(serviceIntent)
-        }
-        
-       binding.chipGroup.setOnCheckedChangeListener {group, checkedId ->
-            if(checkedId != -1) {
-                val mode = when(checkedId) {
-                    binding.f.id -> {
-                        TimerMode.FOCUS}
-                    binding.sb.id -> {
-                        TimerMode.SHORT_BREAK}
-                    else -> {
-                        TimerMode.LONG_BREAK}
+                else {
+                    running = true
+                    start(timer)
                 }
-                viewModel.setMode(mode)
-                timer = setTimer(viewModel.focus.value ?: 1000)
             }
+//        }
+
+
+//        binding.chipGroup.check(binding.f.id)
+//        var timer = setTimer(viewModel.timer.value.timeLeft)
+//        binding.button.setOnClickListener {
+//            if(!active) {
+//                timer.start()
+//                binding.button.text = getString(R.string.stop)
+//            } else {
+//                timer.cancel()
+//                binding.button.text = getString(R.string.start)
+//            }
+//            active = !active
+//
+//            val serviceIntent = Intent(requireActivity(), TimerService::class.java)
+//            requireActivity().startService(serviceIntent)
+//        }
+//
+//       binding.chipGroup.setOnCheckedChangeListener {group, checkedId ->
+//            if(checkedId != -1) {
+//                val mode = when(checkedId) {
+//                    binding.f.id -> {
+//                        TimerMode.FOCUS}
+//                    binding.sb.id -> {
+//                        TimerMode.SHORT_BREAK}
+//                    else -> {
+//                        TimerMode.LONG_BREAK}
+//                }
+////                timer = setTimer()
+//            }
+//        }
+    }
+
+    fun start(timer: CustomCountDownTimer) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            timer.tick(this)
         }
     }
     private fun setTime() {
-        val time = when(viewModel.curMode.value) {
-            TimerMode.FOCUS -> viewModel.focus.value ?:1000
-            TimerMode.SHORT_BREAK -> viewModel.shortBreak.value ?: 1000
-            else -> viewModel.longBreak.value ?: 1000
+        val time = when(viewModel.timer.value.curMode) {
+            TimerMode.FOCUS -> viewModel.timer.value.focusTime
+            TimerMode.SHORT_BREAK -> viewModel.timer.value.shortBreak
+            TimerMode.LONG_BREAK -> viewModel.timer.value.longBreak
         }
 
         binding.progressBar.max = (time / 1000).toInt()
