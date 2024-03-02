@@ -34,8 +34,8 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/secondary"
-            android:textColor="@color/black"
+            app:chipBackgroundColor="@color/color_chip"
+            android:textColor="@color/onBackground"
             android:text="@string/short_break" />
 
 
@@ -44,8 +44,8 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/secondary"
-            android:textColor="@color/black"
+            app:chipBackgroundColor="@color/color_chip"
+            android:textColor="@color/onBackground"
             android:text="@string/focus" />
 
         <com.google.android.material.chip.Chip
@@ -53,8 +53,8 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:chipBackgroundColor="@color/secondary"
-            android:textColor="@color/black"
+            app:chipBackgroundColor="@color/color_chip"
+            android:textColor="@color/onBackground"
             android:text="@string/long_break" />
 
     </com.google.android.material.chip.ChipGroup>

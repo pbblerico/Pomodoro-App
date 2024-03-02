@@ -1,5 +1,6 @@
 package com.example.alarmapp.data.di
 
+import com.example.alarmapp.data.preferences.PreferencesUtils
 import com.example.alarmapp.data.repository.SharedPrefRepository
 import com.example.alarmapp.data.repository.SharedPrefRepositoryImpl
 import dagger.Module
@@ -14,5 +15,5 @@ import javax.inject.Singleton
 class Module {
     @Provides
     @Singleton
-    fun provideSharedPrefRepository(): SharedPrefRepository = SharedPrefRepositoryImpl()
+    fun provideSharedPrefRepository(preferencesUtils: PreferencesUtils): SharedPrefRepository = SharedPrefRepositoryImpl(preferencesUtils)
 }
