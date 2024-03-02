@@ -10,6 +10,7 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.CountDownTimer
 import android.os.IBinder
+import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -30,6 +31,7 @@ class TimerService: Service() {
 
     private fun startTimer(millis: Long) {
         val mediaPlayer = MediaPlayer.create(this, R.raw.positive_notification)
+        val vibrater = getSystemService(VIBRATOR_SERVICE) as Vibrator
         countDownTimer = object: CountDownTimer(millis, 1000) {
             override fun onTick(p0: Long) {
                 val timeRemaining = formatTime(p0)
@@ -38,6 +40,7 @@ class TimerService: Service() {
 
             override fun onFinish() {
                 mediaPlayer.start()
+                vibrater.vibrate(500)
                 stopSelf()
             }
 

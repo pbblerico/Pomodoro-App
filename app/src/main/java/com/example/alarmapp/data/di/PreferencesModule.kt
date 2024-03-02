@@ -4,6 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alarmapp.data.preferences.PreferencesUtils
+import com.example.alarmapp.data.repository.SharedPrefRepository
+import com.example.alarmapp.data.repository.SharedPrefRepositoryImpl
+import com.example.alarmapp.useCase.SharedPrefUseCase
+import com.example.alarmapp.useCase.SharedPrefUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,4 +30,12 @@ object PreferencesModule {
     fun providePreferencesUtils(preferences: SharedPreferences): PreferencesUtils {
         return PreferencesUtils(preferences)
     }
+
+    @Provides
+    @Singleton
+    fun providePreferencesRepository(preferenceUtils: PreferencesUtils): SharedPrefRepository =
+        SharedPrefRepositoryImpl(preferenceUtils)
+
+    @Provides
+    fun providePreferencesUseCase(repo: SharedPrefRepository): SharedPrefUseCase = SharedPrefUseCaseImpl(repo)
 }

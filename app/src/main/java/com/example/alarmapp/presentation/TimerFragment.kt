@@ -10,12 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.example.alarmapp.R
 import com.example.alarmapp.TimerService
 import com.example.alarmapp.TimerViewModel
 import com.example.alarmapp.databinding.FragmentTimerBinding
 import com.example.alarmapp.utils.TimerMode
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TimerFragment : Fragment(R.layout.fragment_timer) {
@@ -41,6 +45,17 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("timer", "view created")
+
+        if(!active) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.timer.collect {
+//                    binding.chipGroup.check(binding.f)
+//                    binding.progress.text = it.focusTime
+                    setTime(it.focusTime)
+                }
+
+            }
+        }
 
         binding.chipGroup.check(binding.f.id)
         var timer = setTimer(viewModel.focus.value ?: 1000)
