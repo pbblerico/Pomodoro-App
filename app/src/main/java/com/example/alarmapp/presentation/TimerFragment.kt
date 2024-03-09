@@ -45,20 +45,20 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
         super.onViewCreated(view, savedInstanceState)
 
 
-        val timer = CustomCountDownTimer(10)
+//        val timer = CustomCountDownTimer(10)
 //        viewLifecycleOwner.lifecycleScope.launch {
 //            timer.tick(this)
-            var running = false
-            binding.button.setOnClickListener {
-                if(running) {
-                    timer.stop()
-                    running = false
-                }
-                else {
-                    running = true
-                    start(timer)
-                }
-            }
+//            var running = false
+//            binding.button.setOnClickListener {
+//                if(running) {
+//                    timer.stop()
+//                    running = false
+//                }
+//                else {
+//                    running = true
+//                    start(timer)
+//                }
+//            }
 //        }
 
 
@@ -94,9 +94,9 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
     }
 
     fun start(timer: CustomCountDownTimer) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            timer.tick(this)
-        }
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            timer.tick(this)
+//        }
     }
     private fun setTime() {
         val time = when(viewModel.timer.value.curMode) {

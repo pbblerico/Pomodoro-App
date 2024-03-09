@@ -8,7 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class CustomCountDownTimer(
-    var secondsLeft: Int,
+    private var secondsLeft: Int = 0,
     private var job: Job? = null,
     private var isRunning: Boolean = false,
 ) {
@@ -33,11 +33,12 @@ class CustomCountDownTimer(
                 Log.d("timer", "$secondsLeft")
                 onFinish?.invoke()
                 isRunning = false
-//                job?.cancel()
-                this.cancel()
-                Log.d("timer", "h")
             }
         }
+    }
+    fun getTimeLeft(): Int = secondsLeft
+    fun setTime(seconds: Int) {
+        secondsLeft = seconds
     }
 
     fun stop() {

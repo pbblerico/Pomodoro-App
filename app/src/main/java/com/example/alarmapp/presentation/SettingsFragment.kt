@@ -41,11 +41,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.npLb.maxValue = 30
 
         binding.saveButton.setOnClickListener {
-//            val focusTime = minutesToMilliSeconds(binding.npF.value)
-//            val shortBreakTime = minutesToMilliSeconds(binding.npSb.value)
-//            val longBreakTime = minutesToMilliSeconds(binding.npLb.value)
-//            Log.d("gere", "$focusTime, $shortBreakTime, $longBreakTime")
-//            viewModel.setTimers(focusTime, shortBreakTime, longBreakTime)
             viewModel.saveModel()
         }
     }
