@@ -8,17 +8,18 @@ import com.example.alarmapp.utils.Actions
 
 class MyReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
+        val serviceIntent = Intent(context, TimerService::class.java)
         when(intent?.action) {
             Actions.START_TIMER.action -> {
-                val intent = Intent(context, TimerService::class.java)
-                intent.setAction(Actions.START_TIMER.action)
-                context?.startService(intent)
+                serviceIntent.setAction(Actions.START_TIMER.action)
             }
             Actions.STOP_TIMER.action -> {
-                val intent = Intent(context, TimerService::class.java)
-                intent.setAction(Actions.STOP_TIMER.action)
-                context?.startService(intent)
+                serviceIntent.setAction(Actions.STOP_TIMER.action)
+            }
+            Actions.RESET_TIMER.action -> {
+                serviceIntent.setAction(Actions.RESET_TIMER.action)
             }
         }
+        context?.startService(serviceIntent)
     }
 }

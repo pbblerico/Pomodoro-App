@@ -6,7 +6,6 @@ import android.app.Service
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
-import android.os.Build
 import android.os.IBinder
 import android.os.Vibrator
 import android.util.Log
@@ -40,15 +39,18 @@ class TimerService : Service() {
             when(it.action) {
                 Actions.START_TIMER.action -> {
                     Log.d("timer", "${countDownTimer.getTimeLeft()}")
-                    startTimer(countDownTimer.getTimeLeft())
                     active = true
                     countDownTimer.setTime(it.getIntExtra(Actions.SET_TIMER.action, countDownTimer.getTimeLeft()))
+                    startTimer(countDownTimer.getTimeLeft())
                 }
-
                 Actions.STOP_TIMER.action -> {
                     Log.d("timer", "stop")
                     countDownTimer.stop()
                     active = false
+                }
+                Actions.RESET_TIMER.action -> {
+                    countDownTimer.reset()
+                    updateNotification(formatTime(countDownTimer.getTimeLeft()))
                 }
             }
         }
@@ -58,7 +60,7 @@ class TimerService : Service() {
 
     private fun onTick() {
         val timeRemaining = formatTime(countDownTimer.getTimeLeft())
-        updateActiveNotification(timeRemaining)
+        updateNotification(timeRemaining)
     }
 
     private fun onFinish() {
@@ -81,50 +83,53 @@ class TimerService : Service() {
         }
     }
 
-    private fun updateActiveNotification(contextText: String) {
+    private fun stopNotification(): PendingIntent {
         val intentStop = Intent(this, MyReceiver::class.java).apply {
             this.action = Actions.STOP_TIMER.action
         }
-        updateNotification(intentStop, contextText)
+        return PendingIntent.getBroadcast(
+            this, 0, intentStop, PendingIntent.FLAG_MUTABLE
+        )
     }
 
-    private fun updateStoppedNotification(contextText: String) {
+    private fun startNotification(): PendingIntent {
         val intentStart = Intent(this, MyReceiver::class.java).apply {
             this.action = Actions.START_TIMER.action
         }
-        updateNotification(intentStart, contextText)
+        return PendingIntent.getBroadcast(
+            this, 0, intentStart, PendingIntent.FLAG_MUTABLE
+        )
     }
 
-    private fun updateNotification(intent: Intent, contentText: String) {
-        val flag =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                PendingIntent.FLAG_IMMUTABLE
-            else
-                0
-        val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            0,
-            intent,
-            flag
+    private fun resetNotification(): PendingIntent {
+        val intentStart = Intent(this, MyReceiver::class.java).apply {
+            this.action = Actions.RESET_TIMER.action
+        }
+        return PendingIntent.getBroadcast(
+            this, 0, intentStart, PendingIntent.FLAG_IMMUTABLE
         )
+    }
 
+    private fun updateNotification(contentText: String) {
         notificationBuilder.setContentText(contentText)
-
-
-        val activeNB = notificationBuilder
             .addAction(
                 0,
                 "Stop",
-                pendingIntent
+                stopNotification()
             )
-        val stoppedNB = notificationBuilder
             .addAction(
                 0,
                 "Start",
-                pendingIntent
+                startNotification()
+            )
+            .addAction(
+                0,
+                "Reset",
+                resetNotification()
             )
 
-        val notification = if (active) activeNB.build() else stoppedNB.build()
+        val notification = notificationBuilder.build()
+//            if (active) activeNB.build() else stoppedNB.build()
 //        startForeground(1, notification)
         if (ActivityCompat.checkSelfPermission(
                 this,
