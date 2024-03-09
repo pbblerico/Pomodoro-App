@@ -21,9 +21,6 @@ import javax.inject.Inject
 class TimerViewModel @Inject constructor(
     private val useCase: SharedPrefUseCase
 ) : ViewModel() {
-    private val _focusTime = MutableLiveData<Long>()
-    val focus = _focusTime
-
     private val _timer = MutableStateFlow(TimerModel(1000, 1000, 1000, TimerMode.FOCUS))
     val timer = _timer
 

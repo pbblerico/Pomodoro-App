@@ -1,7 +1,5 @@
 package com.example.alarmapp.data.repository
 
-import android.content.SharedPreferences
-import com.example.alarmapp.data.model.TimerModel
 import com.example.alarmapp.data.preferences.Preferences
 import com.example.alarmapp.data.preferences.PreferencesUtils
 import com.example.alarmapp.utils.TimerMode

@@ -1,7 +1,6 @@
 package com.example.alarmapp.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,11 +40,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.npLb.maxValue = 30
 
         binding.saveButton.setOnClickListener {
-//            val focusTime = minutesToMilliSeconds(binding.npF.value)
-//            val shortBreakTime = minutesToMilliSeconds(binding.npSb.value)
-//            val longBreakTime = minutesToMilliSeconds(binding.npLb.value)
-//            Log.d("gere", "$focusTime, $shortBreakTime, $longBreakTime")
-//            viewModel.setTimers(focusTime, shortBreakTime, longBreakTime)
             viewModel.saveModel()
         }
     }
