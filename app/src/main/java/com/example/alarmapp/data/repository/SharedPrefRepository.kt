@@ -2,7 +2,6 @@ package com.example.alarmapp.data.repository
 
 import com.example.alarmapp.data.preferences.Preferences
 import com.example.alarmapp.data.preferences.PreferencesUtils
-import com.example.alarmapp.utils.TimerMode
 import javax.inject.Inject
 
 interface SharedPrefRepository {
@@ -12,24 +11,21 @@ interface SharedPrefRepository {
     fun setFocusTime(seconds: Int)
     fun setShortBreak(seconds: Int)
     fun setLongBreak(seconds: Int)
-
-    fun getCurrMode(): TimerMode
-    fun setCurrMode(mode: TimerMode)
 }
 
 class SharedPrefRepositoryImpl @Inject constructor(
     private val sharedPrefs: PreferencesUtils
 ): SharedPrefRepository {
     override fun getFocusTime(): Int {
-        return sharedPrefs.getInt(Preferences.FOCUS)
+        return sharedPrefs.getInt(Preferences.FOCUS, 0)
     }
 
     override fun getShortBreakTime(): Int {
-        return sharedPrefs.getInt(Preferences.SHORT_BREAK)
+        return sharedPrefs.getInt(Preferences.SHORT_BREAK, 0)
     }
 
     override fun getLongBreakTime(): Int {
-        return sharedPrefs.getInt(Preferences.LONG_BREAK)
+        return sharedPrefs.getInt(Preferences.LONG_BREAK, 0)
     }
 
     override fun setFocusTime(seconds: Int) {
@@ -43,13 +39,4 @@ class SharedPrefRepositoryImpl @Inject constructor(
     override fun setLongBreak(seconds: Int) {
         sharedPrefs.saveInt(Preferences.LONG_BREAK, seconds)
     }
-
-    override fun getCurrMode(): TimerMode {
-        return TimerMode.valueOf(sharedPrefs.getString(Preferences.CURR_MODE, TimerMode.FOCUS.name))
-    }
-
-    override fun setCurrMode(mode: TimerMode) {
-        sharedPrefs.saveString(Preferences.CURR_MODE, mode.name)
-    }
-
 }
