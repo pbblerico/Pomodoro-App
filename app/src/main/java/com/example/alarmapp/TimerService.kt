@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.alarmapp.utils.Actions
+import com.example.alarmapp.utils.Extras
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,30 +25,36 @@ import javax.inject.Inject
 class TimerService : Service() {
     @Inject
     lateinit var notificationManager: NotificationManagerCompat
+
     @Inject
     lateinit var countDownTimer: CustomCountDownTimer
+
     @Inject
     lateinit var notificationBuilder: NotificationCompat.Builder
     private val serviceScope = CoroutineScope(Dispatchers.Main)
-    private var active = false
     override fun onCreate() {
         super.onCreate()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
-            when(it.action) {
+            when (it.action) {
                 Actions.START_TIMER.action -> {
                     Log.d("timer", "${countDownTimer.getTimeLeft()}")
-                    active = true
-                    countDownTimer.setTime(it.getIntExtra(Actions.SET_TIMER.action, countDownTimer.getTimeLeft()))
+                    countDownTimer.setTime(
+                        it.getIntExtra(
+                            Extras.SET_TIMER.key,
+                            countDownTimer.getTimeLeft()
+                        )
+                    )
                     startTimer(countDownTimer.getTimeLeft())
                 }
+
                 Actions.STOP_TIMER.action -> {
                     Log.d("timer", "stop")
                     countDownTimer.stop()
-                    active = false
                 }
+
                 Actions.RESET_TIMER.action -> {
                     countDownTimer.reset()
                     updateNotification(formatTime(countDownTimer.getTimeLeft()))
@@ -101,6 +108,7 @@ class TimerService : Service() {
         )
     }
 
+    //todo fix reset
     private fun resetNotification(): PendingIntent {
         val intentStart = Intent(this, MyReceiver::class.java).apply {
             this.action = Actions.RESET_TIMER.action
@@ -129,8 +137,6 @@ class TimerService : Service() {
             )
 
         val notification = notificationBuilder.build()
-//            if (active) activeNB.build() else stoppedNB.build()
-//        startForeground(1, notification)
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS

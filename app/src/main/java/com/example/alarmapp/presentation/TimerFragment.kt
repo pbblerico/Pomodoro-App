@@ -1,26 +1,22 @@
 package com.example.alarmapp.presentation
 
-import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.alarmapp.CustomCountDownTimer
+import com.example.alarmapp.MyReceiver
 import com.example.alarmapp.R
-import com.example.alarmapp.TimerService
 import com.example.alarmapp.TimerViewModel
 import com.example.alarmapp.databinding.FragmentTimerBinding
 import com.example.alarmapp.utils.TimerMode
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TimerFragment : Fragment(R.layout.fragment_timer) {
@@ -28,6 +24,8 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
     private val viewModel: TimerViewModel by activityViewModels()
 
     private var active = false
+
+    private val receiver = MyReceiver()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -39,6 +37,8 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
         binding = FragmentTimerBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -91,6 +91,16 @@ class TimerFragment : Fragment(R.layout.fragment_timer) {
 ////                timer = setTimer()
 //            }
 //        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(receiver, IntentFilter("com.example.alarmapp.TIMER_UI"))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(receiver)
     }
 
     fun start(timer: CustomCountDownTimer) {

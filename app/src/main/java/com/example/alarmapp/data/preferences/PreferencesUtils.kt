@@ -3,7 +3,7 @@ package com.example.alarmapp.data.preferences
 import android.content.SharedPreferences
 
 class PreferencesUtils(private var sharedPrefs: SharedPreferences) {
-    val editor = sharedPrefs.edit()
+    private val editor = sharedPrefs.edit()
     fun getString(key: Preferences, default: String? = null): String {
         return sharedPrefs.getString(key.name, default).orEmpty()
     }
@@ -13,7 +13,7 @@ class PreferencesUtils(private var sharedPrefs: SharedPreferences) {
     }
 
     fun remove(key: Preferences) {
-        sharedPrefs.edit().remove(key.name).apply()
+        editor.remove(key.name).apply()
     }
 
     fun saveString(key: Preferences, value: String) {
