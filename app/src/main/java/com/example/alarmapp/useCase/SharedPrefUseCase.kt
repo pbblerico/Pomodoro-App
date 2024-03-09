@@ -21,9 +21,8 @@ class SharedPrefUseCaseImpl @Inject constructor(
         val shortBreak = repo.getShortBreakTime()
         val longBreak = repo.getLongBreakTime()
         val mode = repo.getCurrMode()
-        val timeLeft = repo.getTimeLeft()
 
-        return TimerModel(focus, shortBreak, longBreak, mode, timeLeft)
+        return TimerModel(focus, shortBreak, longBreak, mode)
     }
 
     override fun saveTimerModel(timerModel: TimerModel) {
@@ -31,7 +30,6 @@ class SharedPrefUseCaseImpl @Inject constructor(
         repo.setShortBreak(timerModel.shortBreak)
         repo.setLongBreak(timerModel.longBreak)
         repo.setCurrMode(timerModel.curMode)
-        repo.setTimeLeft(timerModel.timeLeft)
     }
 
 

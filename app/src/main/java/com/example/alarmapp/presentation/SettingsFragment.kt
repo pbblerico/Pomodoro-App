@@ -43,8 +43,4 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             viewModel.saveModel()
         }
     }
-
-    private fun minutesToMilliSeconds(minutes: Int): Long {
-        return minutes.toLong() * 60 * 1000
-    }
 }

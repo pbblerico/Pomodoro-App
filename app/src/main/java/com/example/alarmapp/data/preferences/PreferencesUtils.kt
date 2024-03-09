@@ -8,8 +8,8 @@ class PreferencesUtils(private var sharedPrefs: SharedPreferences) {
         return sharedPrefs.getString(key.name, default).orEmpty()
     }
 
-    fun getLong(key: Preferences, default: Long = 0): Long {
-        return sharedPrefs.getLong(key.name, default)
+    fun getInt(key: Preferences, default: Int = 0): Int {
+        return sharedPrefs.getInt(key.name, default)
     }
 
     fun remove(key: Preferences) {
@@ -22,9 +22,9 @@ class PreferencesUtils(private var sharedPrefs: SharedPreferences) {
             .apply()
     }
 
-    fun saveLong(key: Preferences, value: Long) {
+    fun saveInt(key: Preferences, value: Int) {
         editor
-            .putLong(key.name, value)
+            .putInt(key.name, value)
             .apply()
     }
 }
