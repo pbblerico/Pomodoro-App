@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.alarmapp.data.model.TimerModel
 import com.example.alarmapp.useCase.SharedPrefUseCase
+import com.example.alarmapp.utils.TimerMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -25,6 +26,13 @@ class TimerViewModel @Inject constructor(
         )
         _timer.value = model
     }
+
+    fun getTimerByMode(mode: TimerMode): Int {
+        if(mode == TimerMode.FOCUS) return timer.value.focusTime
+        else if(mode == TimerMode.SHORT_BREAK) return timer.value.shortBreak
+        else return timer.value.longBreak
+    }
+
 
     fun getModel() {
         viewModelScope.launch {

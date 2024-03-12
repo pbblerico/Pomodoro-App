@@ -34,11 +34,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         super.onHiddenChanged(hidden)
         if(!hidden) {
             val model = viewModel.timer.value
-            setTimers(model)
+            timers(model)
         }
     }
 
-    private fun setTimers(model: TimerModel) {
+    private fun timers(model: TimerModel) {
         binding.npF.value = model.focusTime
         binding.npSb.value = model.shortBreak
         binding.npLb.value = model.longBreak
@@ -56,7 +56,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.npLb.maxValue = 30
 
         viewModel.getModel()
-        setTimers(viewModel.timer.value)
+        timers(viewModel.timer.value)
 
         binding.saveButton.setOnClickListener {
             viewModel.saveModel(binding.npF.value * 60, binding.npSb.value * 60, binding.npLb.value * 60)
