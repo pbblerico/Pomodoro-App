@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.alarmapp.R
 import com.example.alarmapp.TimerViewModel
+import com.example.alarmapp.data.model.TimerModel
 import com.example.alarmapp.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,6 +30,21 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(!hidden) {
+            val model = viewModel.timer.value
+            timers(model)
+        }
+    }
+
+    private fun timers(model: TimerModel) {
+        binding.npF.value = model.focusTime
+        binding.npSb.value = model.shortBreak
+        binding.npLb.value = model.longBreak
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.npF.minValue = 1
         binding.npF.maxValue = 59
@@ -39,12 +55,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.npLb.minValue = 10
         binding.npLb.maxValue = 30
 
-        binding.saveButton.setOnClickListener {
-            viewModel.saveModel()
-        }
-    }
+        viewModel.getModel()
+        timers(viewModel.timer.value)
 
-    private fun minutesToMilliSeconds(minutes: Int): Long {
-        return minutes.toLong() * 60 * 1000
+        binding.saveButton.setOnClickListener {
+            viewModel.saveModel(binding.npF.value * 60, binding.npSb.value * 60, binding.npLb.value * 60)
+        }
     }
 }

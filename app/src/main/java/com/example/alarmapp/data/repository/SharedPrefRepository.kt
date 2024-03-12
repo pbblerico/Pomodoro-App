@@ -2,65 +2,41 @@ package com.example.alarmapp.data.repository
 
 import com.example.alarmapp.data.preferences.Preferences
 import com.example.alarmapp.data.preferences.PreferencesUtils
-import com.example.alarmapp.utils.TimerMode
 import javax.inject.Inject
 
 interface SharedPrefRepository {
-    fun getFocusTime(): Long
-    fun getShortBreakTime(): Long
-    fun getLongBreakTime(): Long
-    fun setFocusTime(millis: Long)
-    fun setShortBreak(millis: Long)
-    fun setLongBreak(millis: Long)
-
-    fun getCurrMode(): TimerMode
-    fun setCurrMode(mode: TimerMode)
-    fun getTimeLeft(): Long
-    fun setTimeLeft(millis: Long)
+    fun getFocusTime(): Int
+    fun getShortBreakTime(): Int
+    fun getLongBreakTime(): Int
+    fun setFocusTime(seconds: Int)
+    fun setShortBreak(seconds: Int)
+    fun setLongBreak(seconds: Int)
 }
 
 class SharedPrefRepositoryImpl @Inject constructor(
     private val sharedPrefs: PreferencesUtils
 ): SharedPrefRepository {
-    override fun getFocusTime(): Long {
-        return sharedPrefs.getLong(Preferences.FOCUS)
+    override fun getFocusTime(): Int {
+        return sharedPrefs.getInt(Preferences.FOCUS, 0)
     }
 
-    override fun getShortBreakTime(): Long {
-        return sharedPrefs.getLong(Preferences.SHORT_BREAK)
+    override fun getShortBreakTime(): Int {
+        return sharedPrefs.getInt(Preferences.SHORT_BREAK, 0)
     }
 
-    override fun getLongBreakTime(): Long {
-        return sharedPrefs.getLong(Preferences.LONG_BREAK)
+    override fun getLongBreakTime(): Int {
+        return sharedPrefs.getInt(Preferences.LONG_BREAK, 0)
     }
 
-    override fun setFocusTime(millis: Long) {
-        sharedPrefs.saveLong(Preferences.FOCUS, millis)
+    override fun setFocusTime(seconds: Int) {
+        sharedPrefs.saveInt(Preferences.FOCUS, seconds)
     }
 
-    override fun setShortBreak(millis: Long) {
-        sharedPrefs.saveLong(Preferences.SHORT_BREAK, millis)
+    override fun setShortBreak(seconds: Int) {
+        sharedPrefs.saveInt(Preferences.SHORT_BREAK, seconds)
     }
 
-    override fun setLongBreak(millis: Long) {
-        sharedPrefs.saveLong(Preferences.LONG_BREAK, millis)
+    override fun setLongBreak(seconds: Int) {
+        sharedPrefs.saveInt(Preferences.LONG_BREAK, seconds)
     }
-
-    override fun getCurrMode(): TimerMode {
-        return TimerMode.valueOf(sharedPrefs.getString(Preferences.CURR_MODE, TimerMode.FOCUS.name))
-    }
-
-    override fun setCurrMode(mode: TimerMode) {
-        sharedPrefs.saveString(Preferences.CURR_MODE, mode.name)
-    }
-
-    override fun getTimeLeft(): Long {
-        return sharedPrefs.getLong(Preferences.TIME_LEFT)
-    }
-
-    override fun setTimeLeft(millis: Long) {
-        sharedPrefs.saveLong(Preferences.TIME_LEFT, millis)
-    }
-
-
 }

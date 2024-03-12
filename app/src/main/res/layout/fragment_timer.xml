@@ -27,6 +27,7 @@
         app:layout_constraintTop_toBottomOf="@id/title"
         app:singleLine="true"
         app:singleSelection="true"
+        app:selectionRequired="true"
         >
 
         <com.google.android.material.chip.Chip
